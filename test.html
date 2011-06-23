@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Unlambda Test</title>
+    <script src="unlambda.js"></script>
+    <script>
+      function test() {
+        var program = document.getElementById('program').value;
+        document.getElementById('result').value = '';
+        document.getElementById('out').value = '';
+        document.getElementById('error').value = '';
+
+        var result = function(x) {
+          document.getElementById('result').value = Unlambda.unparse(x);
+          document.getElementById('out').value += '\n---DONE---';
+        };
+
+        var error = function(x) {
+          document.getElementById('error').value = x.message;
+          document.getElementById('out').value += '\n---ERROR---';
+        };
+
+        var output = function(x) {
+          document.getElementById('out').value += x;
+        };
+
+        var input = function(callback) {
+          setTimeout((function() {
+            callback(prompt('Unlambda input:'));
+          }), 1);
+        };
+
+        try {
+          parsed = Unlambda.parse(program);
+        } catch (e) {
+          error(e);
+          return;
+        }
+
+        Unlambda.eval(parsed, result, input, output, error);
+      }
+    </script>
+  </head>
+  <body>
+    Code:<br/>
+    <textarea id="program" rows="5" cols="80">`
+``si`k``s.H``s.e``s.l``s.l``s.o``s. 
+``s.w``s.o``s.r``s.l``s.d``s.!``sri
+``si``si``si``si``si``si``si``si`ki
+</textarea>
+    <button onclick="test()">Run</button>
+    <br/>
+    Result:<br/>
+    <textarea id="result" readonly rows="1" cols="80"></textarea>
+    <br/>
+    Error:<br/>
+    <textarea id="error" readonly rows="1" cols="80"></textarea>
+    <br/>
+    Out:<br/>
+    <textarea id="out" readonly rows="10" cols="80"></textarea>
+  </body>
+</html>
