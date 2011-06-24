@@ -94,7 +94,7 @@ runEval = (program, result, input, output, error) ->
   eval program, (value) -> result value
   null
 
-# Parses an Unlambda program into an evaluatable tree.
+# Parses a program into an evaluatable Unlambda expression.
 #   @arg program: The source code to evaluate.
 parse = (program) ->
   doParse = ->
@@ -116,8 +116,8 @@ parse = (program) ->
     result
   doParse()
 
-# Converts a parsed Unlambda program into a string representation.
-#   @arg program:[op, closure]: The (root of the) evaluated Unlambda program.
+# Converts a parsed Unlambda expression into a string representation.
+#   @arg program:[op, closure]: The Unlambda expression to flatten.
 unparse = ([op, closure]) ->
   switch op
     when 'r', 'i', 'k', 's', 'v', 'd', 'c', 'e', '@', '|'
