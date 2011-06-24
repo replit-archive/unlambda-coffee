@@ -4,7 +4,7 @@ CALL_LIMIT = 500
 call_current = 0
 call = (target, arg) ->
   if call_current >= CALL_LIMIT
-    called = 0
+    call_current = 0
     setTimeout (-> target arg), 0
   else
     call_current++
