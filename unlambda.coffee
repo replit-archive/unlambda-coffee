@@ -51,7 +51,7 @@ runEval = (program, result, input, output, error) ->
       when 'v'
         call continuation, ['v', null]
       when 'd1'
-        eval ['`', [closure, arg]], (value) ->
+        Eval ['`', [closure, arg]], (value) ->
           call continuation, value
       when 'e'
         result arg
@@ -59,17 +59,17 @@ runEval = (program, result, input, output, error) ->
         input (value_read) ->
           register = value_read?[0]
           action = if register? then 'i' else 'v'
-          eval ['`', [arg, [action, null]]], continuation
+          Eval ['`', [arg, [action, null]]], continuation
       when '|'
         if register?
-          eval ['`', [arg, ['.', register]]], continuation
+          Eval ['`', [arg, ['.', register]]], continuation
         else
-          eval ['`', [arg, ['v', null]]], continuation
+          Eval ['`', [arg, ['v', null]]], continuation
       when '?'
         action = if register == closure then 'i' else 'v'
-        eval ['`', [arg, [action, null]]], continuation
+        Eval ['`', [arg, [action, null]]], continuation
       when 'c'
-        eval ['`', [arg, ['c1', continuation]]], continuation
+        Eval ['`', [arg, ['c1', continuation]]], continuation
       when 'c1'
         call closure, arg
       else
@@ -77,21 +77,21 @@ runEval = (program, result, input, output, error) ->
     null
 
   # Evaluates an Unlambda node and passes the result to the given continuation.
-  eval = ([func, closure], continuation) ->
+  Eval = ([func, closure], continuation) ->
     if func is '`'
       [func, arg] = closure
-      eval func, (evaled_func) ->
+      Eval func, (evaled_func) ->
         if evaled_func[0] is 'd'
           call continuation, ['d1', arg]
         else
-          eval arg, (evaled_arg) ->
+          Eval arg, (evaled_arg) ->
             apply evaled_func, evaled_arg, (res) ->
               call continuation, res
     else
       call continuation, [func, closure]
     null
 
-  eval program, (value) -> result value
+  Eval program, (value) -> result value
   null
 
 # Parses a program into an evaluatable Unlambda expression.
